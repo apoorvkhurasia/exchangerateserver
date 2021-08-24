@@ -39,6 +39,9 @@ public class Loader {
             exchangeRateProvider.setStartExchangeRatesToUSD(usdExchangeRates);
             exchangeRateProvider.setExchangeRateVolatility(exchangeRateVol);
             log.info("Loaded dummy data into the repositories successfully.");
+
+            System.setProperty("SERVER_PORT", "5000");
+            log.info("Set server port to 5000");
         };
     }
 }

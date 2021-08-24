@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RandomExchangeRateProvider implements ExchangeRateProvider {
 
     private static final long startTime = System.currentTimeMillis();
-    private static final long millisInYear = 365 * 24 * 60 * 60 * 1000;
+    private static final long millisInYear = 365L * 24 * 60 * 60;
     private static final Random random = new Random();
 
     private final Map<String, Double> startExchangeRatesToUSD = new ConcurrentHashMap<>();
@@ -29,22 +29,23 @@ public class RandomExchangeRateProvider implements ExchangeRateProvider {
 
     @Override
     public ExchangeRate get(Currency from, Currency to) {
-        Double fromToUSD = startExchangeRatesToUSD.get(from.getIsoCode());
-        Double toToUSD = startExchangeRatesToUSD.get(to.getIsoCode());
-        if (fromToUSD == null) {
-            throw new CurrencyNotFoundException(from.getIsoCode());
-        }
-        if (toToUSD == null) {
-            throw new CurrencyNotFoundException(to.getIsoCode());
-        }
-
-        double fromVol = exchangeRateVolatility.getOrDefault(from, 1d);
-        double toVol = exchangeRateVolatility.getOrDefault(to, 1d);
         long currentTime = System.currentTimeMillis();
-        double timeComponent = Math.sqrt(((double) (currentTime - startTime )) / millisInYear);
-        double randomFrom = fromToUSD * random.nextGaussian() *  fromVol * timeComponent;
-        double randomTo = toToUSD * random.nextGaussian() *  toVol * timeComponent;
+        double randomFromRate = getRandomExchangeRateToUSD(from, currentTime);
+        double randomToRate = getRandomExchangeRateToUSD(to, currentTime);
+        return new ExchangeRate(from, to, currentTime, randomToRate/randomFromRate);
+    }
 
-        return new ExchangeRate(from, to, currentTime, randomTo/randomFrom);
+    private double getRandomExchangeRateToUSD(Currency of, long time) {
+        if ("USD".equals(of.getIsoCode())) {
+            return 1;
+        } else {
+            Double startRate = startExchangeRatesToUSD.get(of.getIsoCode());
+            if (startRate == null) {
+                throw new CurrencyNotFoundException(of.getIsoCode());
+            }
+            double fromVol = exchangeRateVolatility.getOrDefault(of.getIsoCode(), 1d);
+            double timeComponent = Math.sqrt(((double) (time - startTime )) / millisInYear);
+            return startRate * ( 1 + random.nextGaussian() *  fromVol * timeComponent / 100d);
+        }
     }
 }
