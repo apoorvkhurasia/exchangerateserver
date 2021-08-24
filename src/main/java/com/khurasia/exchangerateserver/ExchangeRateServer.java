@@ -21,6 +21,12 @@ public class ExchangeRateServer {
         this.exchangeRateProvider = exchangeRateProvider;
     }
 
+    /**
+     * Gets the exchange rate from the given currency to the given currency.
+     * @param fromCurrencyCode The from currency's ISO currency code.
+     * @param toCurrencyCode The to currency's ISO currency code.
+     * @return The exchange rate.
+     */
     @GetMapping("/simulated_rate/{from}/{to}")
     public ExchangeRate getExchangeRate(@PathVariable("from") String fromCurrencyCode,
                                         @PathVariable("to") String toCurrencyCode) {
@@ -29,11 +35,19 @@ public class ExchangeRateServer {
                 currencyProvider.get(toCurrencyCode));
     }
 
+    /**
+     * Gets a list of all supported currencies.
+     */
     @GetMapping("/all_currencies")
     public List<Currency> getAllSupportedCurrencies() {
         return new ArrayList<>(currencyProvider.getAllSupportedCurrencies());
     }
 
+    /**
+     * Gets the exchange rate from the given currency to all supported currencies.
+     * @param fromCcyCode The from currency's ISO currency code.
+     * @return The exchange rates.
+     */
     @GetMapping("/simulated_rate/{from}")
     public List<ExchangeRate> getExchangeRateAgainstAllSupportedCurrencies(@PathVariable("from") String fromCcyCode) {
         Currency from = currencyProvider.get(fromCcyCode);
