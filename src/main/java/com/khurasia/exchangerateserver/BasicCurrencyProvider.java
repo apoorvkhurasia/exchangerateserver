@@ -20,11 +20,9 @@ public class BasicCurrencyProvider implements CurrencyProvider {
         supportedCurrencies.put("EUR", new Currency("EUR", "Euro"));
         supportedCurrencies.put("JPY", new Currency("JPY", "Japanese Yen"));
         supportedCurrencies.put("GBP", new Currency("GBP", "British Pound Sterling"));
-        supportedCurrencies.put("HKD", new Currency("HKD", "Hong Kong Dollar"));
         supportedCurrencies.put("INR", new Currency("INR", "Indian Rupee"));
         supportedCurrencies.put("CHF", new Currency("CHF", "Swiss Frank"));
         supportedCurrencies.put("CAD", new Currency("CAD", "Canadian Dollar"));
-        supportedCurrencies.put("KRW", new Currency("KRW", "Korean Wong"));
     }
 
     @Override
