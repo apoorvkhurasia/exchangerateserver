@@ -1,5 +1,5 @@
 ## Exchange Rate Server
-[![Build](https://github.com/apoorvkhurasia/exchangerateserver/workflows/Build/badge.svg)](https://github.com/apoorvkhurasia/exchangerateserver/actions?query=workflow%3ABuild) [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/apoorvkhurasia/exchangerateserver/blob/master/LICENSE)
+[![Build](https://github.com/apoorvkhurasia/exchangerateserver/workflows/CI/badge.svg)](https://github.com/apoorvkhurasia/exchangerateserver/actions?query=workflow%3ACI) [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/apoorvkhurasia/exchangerateserver/blob/master/LICENSE)
 
 This server provides randomly generated exchange rates for educational purposes.
 It is designed to teach learners how to consume a REST API and build a fast
