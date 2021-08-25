@@ -1,5 +1,7 @@
 package com.khurasia.exchangerateserver;
 
+import com.khurasia.exchangerateserver.model.Currency;
+import com.khurasia.exchangerateserver.model.ExchangeRate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -15,29 +17,39 @@ public class Loader {
     private static final Logger log = LoggerFactory.getLogger(Loader.class);
 
     @Bean
-    CommandLineRunner initSystem(RandomExchangeRateProvider exchangeRateProvider) {
+    CommandLineRunner initSystem(CurrencyProvider currencyProvider, RandomExchangeRateProvider exchangeRateProvider) {
         return args -> {
-            Map<String, Double> usdExchangeRates = new HashMap<>();
-            usdExchangeRates.put("GBP", 0.729471);
-            usdExchangeRates.put("INR", 74.157467);
-            usdExchangeRates.put("AUD", 1.380885);
-            usdExchangeRates.put("EUR", 0.851087);
-            usdExchangeRates.put("CHF", 0.911549);
-            usdExchangeRates.put("CAD", 1.263333);
-            usdExchangeRates.put("JPY", 109.520990);
+            Map<String, Double> usdExchangeRatesToCcy = new HashMap<>();
+            usdExchangeRatesToCcy.put("GBP", 0.729471);
+            usdExchangeRatesToCcy.put("INR", 74.157467);
+            usdExchangeRatesToCcy.put("AUD", 1.380885);
+            usdExchangeRatesToCcy.put("EUR", 0.851087);
+            usdExchangeRatesToCcy.put("CHF", 0.911549);
+            usdExchangeRatesToCcy.put("CAD", 1.263333);
+            usdExchangeRatesToCcy.put("JPY", 109.520990);
 
-            Map<String, Double> exchangeRateVol = new HashMap<>();
-            exchangeRateVol.put("GBP", 5.12);
-            exchangeRateVol.put("INR", 1.88);
-            exchangeRateVol.put("AUD", 6.08);
-            exchangeRateVol.put("EUR", 3.61);
-            exchangeRateVol.put("CHF", 5.99);
-            exchangeRateVol.put("CAD", 7.76);
-            exchangeRateVol.put("JPY", 4.52);
+            Map<String, Double> rawCcyCodeAnnualVol = new HashMap<>();
+            rawCcyCodeAnnualVol.put("GBP", 5.12);
+            rawCcyCodeAnnualVol.put("INR", 1.88);
+            rawCcyCodeAnnualVol.put("AUD", 6.08);
+            rawCcyCodeAnnualVol.put("EUR", 3.61);
+            rawCcyCodeAnnualVol.put("CHF", 5.99);
+            rawCcyCodeAnnualVol.put("CAD", 7.76);
+            rawCcyCodeAnnualVol.put("JPY", 4.52);
 
             log.info("Loading dummy data into the repositories.");
+            long startTime = System.currentTimeMillis();
+            Map<Currency, ExchangeRate> usdExchangeRates = new HashMap<>();
+            Map<Currency, Double> ccyAnnualisedVols = new HashMap<>();
+            for (Currency ccy : currencyProvider.getAllSupportedCurrencies()) {
+                if (!ccy.equals(Currency.USD)) {
+                    usdExchangeRates.put(ccy, new ExchangeRate(ccy, Currency.USD, startTime,
+                            usdExchangeRatesToCcy.get(ccy.getIsoCode())));
+                    ccyAnnualisedVols.put(ccy, rawCcyCodeAnnualVol.get(ccy.getIsoCode()));
+                }
+            }
             exchangeRateProvider.setStartExchangeRatesToUSD(usdExchangeRates);
-            exchangeRateProvider.setExchangeRateVolatility(exchangeRateVol);
+            exchangeRateProvider.setExchangeRateVolatility(ccyAnnualisedVols);
             log.info("Loaded dummy data into the repositories successfully.");
         };
     }

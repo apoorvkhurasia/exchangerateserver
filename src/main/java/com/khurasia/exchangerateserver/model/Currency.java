@@ -19,6 +19,8 @@ public class Currency {
         this.currencyName = currencyName;
     }
 
+    public static final Currency USD = new Currency("USD", "United States Dollar");
+
     @Schema(description = "ISO currency code for this currency.", example = "USD, GBP, etc.")
     @JsonGetter("iso_code")
     public String getIsoCode() {
@@ -42,5 +44,10 @@ public class Currency {
     @Override
     public int hashCode() {
         return Objects.hash(isoCode, currencyName);
+    }
+
+    @Override
+    public String toString() {
+        return isoCode;
     }
 }

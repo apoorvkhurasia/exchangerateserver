@@ -50,8 +50,23 @@ public class ExchangeRateServer {
                 currencyProvider.get(toCurrencyCode));
     }
 
+    @Operation(summary = "Gets the exchange rate on the next update or at the timeout, whichever is earliest.")
+    @GetMapping("/simulated_rate/await/{from}/{to}/{timeout_in_millis}")
+    public ExchangeRate getExchangeRateOnNextUpdate(
+            @Parameter(description = "ISO currency code of the currency which is to be converted.")
+            @PathVariable("from") String fromCurrencyCode,
+            @Parameter(description = "ISO currency code of the currency to which the from currency is to be converted.")
+            @PathVariable("to") String toCurrencyCode,
+            @Parameter(description = "Timeout in milliseconds") @PathVariable("timeout_in_millis") long millisToWait) {
+        return exchangeRateProvider.awaitAndGetUpdate(
+                currencyProvider.get(fromCurrencyCode),
+                currencyProvider.get(toCurrencyCode),
+                millisToWait);
+    }
+
     /**
      * Gets the exchange rate from the given currency to all supported currencies.
+     *
      * @param fromCcyCode The from currency's ISO currency code.
      * @return The exchange rates.
      */

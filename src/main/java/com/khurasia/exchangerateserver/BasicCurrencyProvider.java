@@ -15,7 +15,7 @@ public class BasicCurrencyProvider implements CurrencyProvider {
     private final Map<String, Currency> supportedCurrencies = new ConcurrentHashMap<>();
 
     public BasicCurrencyProvider() {
-        supportedCurrencies.put("USD", new Currency("USD", "United States Dollar"));
+        supportedCurrencies.put("USD", Currency.USD);
         supportedCurrencies.put("AUD", new Currency("AUD", "Australian Dollar"));
         supportedCurrencies.put("EUR", new Currency("EUR", "Euro"));
         supportedCurrencies.put("JPY", new Currency("JPY", "Japanese Yen"));
