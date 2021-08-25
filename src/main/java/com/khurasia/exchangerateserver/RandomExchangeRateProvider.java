@@ -14,14 +14,12 @@ import static com.khurasia.exchangerateserver.model.Currency.USD;
 @Component
 public class RandomExchangeRateProvider implements ExchangeRateProvider {
 
-    private static final long startTime = System.currentTimeMillis();
     private static final long millisInYear = 365L * 24 * 60 * 60;
     private static final int millisInSecond = 60000;
     private static final Random random = new Random();
 
     private final Map<Currency, ExchangeRate> startExchangeRatesToUSD = new ConcurrentHashMap<>();
     private final Map<Currency, Double> exchangeRateVolatility = new ConcurrentHashMap<>();
-    private final Map<Currency, Object> currencyWaitHandlers = new ConcurrentHashMap<>();
 
     public void setStartExchangeRatesToUSD(Map<Currency, ExchangeRate> startExchangeRatesToUSD) {
         this.startExchangeRatesToUSD.putAll(startExchangeRatesToUSD);
