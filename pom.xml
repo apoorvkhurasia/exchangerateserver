@@ -8,9 +8,9 @@
         <version>2.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
+    <groupId>com.khurasia</groupId>
     <artifactId>ExchangeRateServer</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>ExchangeRateServer</name>
     <description>ExchangeRateServer</description>
     <properties>

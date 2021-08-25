@@ -43,9 +43,10 @@ public class RandomExchangeRateProvider implements ExchangeRateProvider {
             if (startRate == null) {
                 throw new CurrencyNotFoundException(of.getIsoCode());
             }
-            double fromVol = exchangeRateVolatility.getOrDefault(of.getIsoCode(), 1d);
+            double fromVol = exchangeRateVolatility.getOrDefault(of.getIsoCode(), 1d) / 100d;
             double timeComponent = Math.sqrt(((double) (time - startTime )) / millisInYear);
-            return startRate * ( 1 + random.nextGaussian() *  fromVol * timeComponent / 100d);
+            double simulatedRate = startRate * ( 1 + random.nextGaussian() *  fromVol * timeComponent);
+            return Math.round(simulatedRate * 10000d) / 10000d;
         }
     }
 }
